@@ -72,7 +72,7 @@ for i in range(0,50):
     amp_z.append(max(amp_zeta))
     amp_vel.append(max(amp_u))
     
-    
+#==========Plots for z and u in normalized domain================   
 fig, ax=plt.subplots(2,1, figsize = (8,6), sharex = True)
 plt.sca(ax[0])
 plt.plot(x/L, amp_z)
