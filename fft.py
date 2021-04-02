@@ -65,7 +65,7 @@ x = np.linspace(a,b,Ndx)
 amp_z = []
 amp_vel = []
 
-for i in range(0,50):
+for i in range(Ndx):
     freq_zeta, FFT_zeta, phase_zeta, amp_zeta = freq(Szeta[:,i], 1, w)
     freq_u, FFT_u, phase_u, amp_u = freq(Su[:,i], 1, w)
     
