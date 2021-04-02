@@ -76,11 +76,11 @@ for i in range(0,50):
 fig, ax=plt.subplots(2,1, figsize = (8,6), sharex = True)
 plt.sca(ax[0])
 plt.plot(x/L, amp_z)
-plt.ylabel("z")
+plt.ylabel("$|\zeta$|(m)")  #elevation amplitude
 plt.sca(ax[1])
 plt.plot(x/L, amp_vel)
-plt.ylabel("u")
-plt.xlabel("x[m]")
+plt.ylabel("$u$(m/s)")
+plt.xlabel("$x$(m)")
 plt.tight_layout() 
 
 
