@@ -90,7 +90,7 @@ g = 9.81
 H0 = 500
 rho0 = 1000
 
-A = 0.5
+A = 0.6
 sigma = 1.4*10**(-4)
 c = np.sqrt(g*H0)
 lambd = 0.
@@ -100,7 +100,7 @@ Include_Nonlinear = True
 
 L = 200e3
 a,b = 0,L #Lower and upper boundaries of the domain
-Ndx = 100 #Number of grid steps
+Ndx = 200 #Number of grid steps
 dx = (b-a)/Ndx
 
 dt = 0.05 * dx / np.sqrt(g * H0)
@@ -126,9 +126,10 @@ def bottom_gauss(H0,sill_height,sill_position,sill_width):
 #   SIMULATIONS
 #   ===========================================================================
 
-sill_height = np.linspace(0,460,2)
+sill_height = np.linspace(0,450,10)
 #sill_position = np.linspace(-3/4,3/4,4)
-#sill_width = np.linspace(0.1,0.5,5)
+#sill_width = np.linspace(0.1,1,5)
+#SLR = np.linspace(0,15,5)
 Nsim = len(sill_height)
 
 Su = np.zeros([Nsim,Ndt+1,Ndx])
@@ -138,9 +139,11 @@ print('Simulations started\nCourant number =',CFL,'\n')
 
 for i in range(Nsim):
     tstart = time.time()
-    H = bottom_gauss(H0,sill_height[i],-3/4,0.1)
+    H = bottom_gauss(H0,sill_height[i],-1/2,0.1)
+    #H = bottom_gauss(H0,sill_height[i],-1,0.1) + SLR[i]
+    #H = bottom_gauss(H0,460,-1,0.1) + SLR[i]
     #H = bottom_gauss(H0,5,sill_position[i],0.1)
-    #H = bottom_gauss(H0,40,0,sill_width[i])
+    #H = bottom_gauss(H0,460,-1/2,sill_width[i])
     Su[i],Szeta[i] = main()
     elapsed = time.time() - tstart
     print('Simulation %d/%d completed' % (i+1,Nsim))
@@ -166,7 +169,6 @@ def FFT(S):
 
 Amp_zeta = np.zeros([Nsim,Ndx])
 Amp_u = np.zeros([Nsim,Ndx])
-#Phase_zeta = np.zeros([Nsim,Ndx])
 
 fig, ax=plt.subplots(2,1, figsize = (8,6), sharex = True)
 
@@ -179,7 +181,7 @@ for j in range(Nsim):
         Amp_u[j,i] = max(amp_u)
      
     plt.sca(ax[0])
-    plt.plot(x/1000, Amp_zeta[j], label=round(sill_height[j],2))
+    plt.plot(x/1000, Amp_zeta[j], label=round(sill_height[j],0))
     plt.ylabel("$|\zeta$| (m)")  #elevation amplitude
     plt.xlim([x[0]/1000,x[-1]/1000])
     plt.sca(ax[1])
@@ -188,7 +190,8 @@ for j in range(Nsim):
     plt.xlabel("$x$ (km)")
     plt.xlim([x[0]/1000,x[-1]/1000])
 ax[0].legend()
-plt.tight_layout() 
+plt.tight_layout()
+plt.savefig('experiment.png',dpi=300)
 
 plt.figure()
 plt.axhline(y=0, color='r', linestyle='--')
